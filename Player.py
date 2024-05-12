@@ -1,7 +1,7 @@
 class Player:
     def __init__(self, color):
         self.color = color
-        self.diskNum = 0
+        self.diskNum = 30
         
     def get_move(self):
         r = int(input("Enter row (0-7): "))

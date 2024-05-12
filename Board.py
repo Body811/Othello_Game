@@ -21,17 +21,21 @@ class Board:
     def is_valid_move(self, row, col, player_color):
         if not (0 <= row < 8) or not (0 <= col < 8) or self.board[row][col] != ' ':
             return False
-
-        directions = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        # directions = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         for dr, dc in directions:
             r, c = row + dr, col + dc
-            if 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] != player_color and self.board[r][c] != ' ':
+            if 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] != player_color and self.board[r][c] != ' ':    
+                while 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] != player_color and self.board[r][c] != ' ':
+                    r += dr
+                    c += dc
+                if 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] == player_color:
                     return True
         return False
         
-    def make_move(self, row, col, player):
+    def make_move(self, row, col, player, valid_moves):
 
-        if not self.is_valid_move(row, col, player.color):
+        if not (row,col) in valid_moves:
             return False
         
         self.board[row][col] = player.color
