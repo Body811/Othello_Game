@@ -7,15 +7,10 @@ class Othello:
     def __init__(self):
         self.board = Board()
         self.player = Player("B")
-        self.computer = Player("W")
+        self.computer = AiPlayer("W")
         self.turn = "B"
         
-    def isfinshed(self):
-        if (not any(self.board.is_valid_move(r, c, 'B') or self.board.is_valid_move(r, c, 'W') for r in range(8) for c in range(8)) 
-            or self.player.diskNum == 0 or self.computer.diskNum == 0):
-            return True
-        
-        return False
+    
     
     def switch_turn(self):
         if self.turn == "B":
@@ -24,27 +19,33 @@ class Othello:
             self.turn = "B"
     
     
-    def get_valid_moves(self, player):
-        valid_moves = []
-        for row in range(8):
-            for col in range(8):
-                if self.board.is_valid_move(row, col, player.color):
-                    valid_moves.append((row, col))
-        return valid_moves
+    
                     
  
     
     def play(self):
+        
+        choice = input("Choose A difficulty\n1.Easy\n2.Medium\n3.Hard\n>>")
+        if choice == '1':
+            difficulty = 1  # Easy
+        elif choice == '2':
+            difficulty = 3  # Medium
+        elif choice == '3':
+            difficulty = 5  # Hard
+        else:
+            difficulty = 1  #default is easy
+        
+            
+        
         self.board.display()
         flag = False
-        while not self.isfinshed():
+        while not self.board.is_finshed(self.player, self.computer):
             if self.turn == "B":
                 flag = False
                 print("It black's turn")
-                valid_moves = self.get_valid_moves(self.player)
+                valid_moves = self.board.get_valid_moves(self.player)
                 if valid_moves:
-                    row, col = self.player.get_move() #comment this if you want it to play it self
-                    # row, col = random.choice(valid_moves) # Uncomment this if you want it to play it self
+                    row, col = self.player.get_move() 
                     if (self.board.make_move(row, col, self.player, valid_moves)):
                         self.board.display()
                         self.switch_turn()
@@ -56,10 +57,10 @@ class Othello:
                     self.switch_turn()
             else:
                 print("It is white's turn")
-                valid_moves = self.get_valid_moves(self.computer)
+                valid_moves = self.board.get_valid_moves(self.computer)
                 if valid_moves:
-                    row, col = self.computer.get_move() #comment this if you want it to play it self
-                    # row, col = random.choice(valid_moves) # Uncomment this if you want it to play it self
+                    row, col = self.computer.get_move(self.board, difficulty, self.player) 
+
                     if(self.board.make_move(row, col, self.computer, valid_moves)):
                         self.board.display()
                         self.switch_turn()
@@ -72,7 +73,7 @@ class Othello:
                     print("You Dont have valid Moves. Your turn is Skiped")
                     self.switch_turn()
                     
-            # time.sleep(1)  # Uncomment this if you want it to play it self
+
                     
         print(f"  {'-'*10} GAME OVER {'-'*10}\n")
         black_count, white_count = self.board.count_disks()

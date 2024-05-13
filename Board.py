@@ -54,37 +54,32 @@ class Board:
                     c += dc
         player.diskNum -= 1
         return True
+    
+    
     def count_disks(self):
         black_count = sum(row.count('B') for row in self.board)
         white_count = sum(row.count('W') for row in self.board)
         return black_count, white_count    
+    
+    
+    def get_valid_moves(self, player):
+        valid_moves = []
+        for row in range(8):
+            for col in range(8):
+                if self.is_valid_move(row, col, player.color):
+                    valid_moves.append((row, col))
+        return valid_moves
+
+    def is_finshed(self,player1 ,player2):
+        if (not any(self.is_valid_move(r, c, 'B') or self.is_valid_move(r, c, 'W') for r in range(8) for c in range(8)) 
+            or player1.diskNum == 0 or player2.diskNum == 0):
+            return True
+        
+        return False
+    
+    def copy(self):
+        new_board = Board()
+        new_board.board = [row[:] for row in self.board]
+        return new_board
 
 
-# def test_board():
-#     board = Board()
-#     current = "B"
-#     # Display initial board
-#     print("Initial Board:")
-#     board.display_board()
-
-#     # Test is_valid_move method
-#     while True:
-#         if current == "B":
-#             print("Black's Turn")
-#         else:
-#             print("White's Turn")
-
-#         r = int(input("Enter row (0-7): "))
-#         c = int(input("Enter column (0-7): "))
-
-#         if board.make_move(r, c, current):
-#             print("invalid move")    
-#             if current == "B":
-#                 current = "W"
-#             else:
-#                 current = "B"    
-#             board.display_board()     
-#         else:
-#             print("invalid move")    
-
-# test_board()
