@@ -6,9 +6,12 @@ class AiPlayer(Player):
         super().__init__(color)
 
     def get_move(self, board, depth, opponent):
+        valid_moves = board.get_valid_moves(self)
+        if len(valid_moves) == 1:
+            return valid_moves[0]
+        
         _, move = self.minimax(
-            board, depth, float("-inf"), float("inf"), True, opponent
-        )
+            board, depth, float("-inf"), float("inf"), True, opponent)
         return move
 
     def evaluate(self, board):
@@ -33,9 +36,7 @@ class AiPlayer(Player):
             for move in valid_moves:
                 new_board = board.copy()
                 new_board.make_move(move[0], move[1], self, valid_moves)
-                eval, _ = self.minimax(
-                    new_board, depth - 1, alpha, beta, False, opponent
-                )
+                eval, _ = self.minimax(new_board, depth - 1, alpha, beta, False, opponent)
 
                 if eval > max_eval:
                     max_eval = eval
@@ -55,9 +56,7 @@ class AiPlayer(Player):
             for move in valid_moves:
                 new_board = board.copy()
                 new_board.make_move(move[0], move[1], opponent, valid_moves)
-                eval, _ = self.minimax(
-                    new_board, depth - 1, alpha, beta, True, opponent
-                )
+                eval, _ = self.minimax(new_board, depth - 1, alpha, beta, True, opponent)
 
                 if eval < min_eval:
                     min_eval = eval
