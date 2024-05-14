@@ -1,4 +1,3 @@
-import sys
 import pygame as pg
 
 Vec2 = pg.math.Vector2

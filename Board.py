@@ -1,4 +1,3 @@
-import os
 import pygame as pg
 
 WIN_SIZE = 600
@@ -33,7 +32,6 @@ class Board:
         return pg.transform.smoothscale(img, res)
 
     def print_caption(self, turn):
-        player = ""
         if turn == "B":
             player = "Black"
         else:
@@ -104,5 +102,3 @@ class Board:
         new_board = Board(self.game)
         new_board.board = [row[:] for row in self.board]
         return new_board
-
-

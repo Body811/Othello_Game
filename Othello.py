@@ -8,12 +8,14 @@ from AiPlayer import AiPlayer
 Vec2 = pg.math.Vector2
 WIN_SIZE = 600
 CELL_SIZE = WIN_SIZE // 8
+
+
 class Game:
-    def __init__(self,difficulty):
+    def __init__(self, difficulty):
         pg.init()
         self.screen = pg.display.set_mode([WIN_SIZE] * 2)
         self.clock = pg.time.Clock()
-        self.othello = Othello(self,difficulty)
+        self.othello = Othello(self, difficulty)
 
     def check_event(self):
         for event in pg.event.get():
@@ -30,7 +32,7 @@ class Game:
 
 
 class Othello:
-    def __init__(self, game,difficulty):
+    def __init__(self, game, difficulty):
         self.board = Board(game)
         self.player = Player("B")
         self.computer = AiPlayer("W")
@@ -55,67 +57,65 @@ class Othello:
                     valid_moves.append((row, col))
         return valid_moves
 
-
-
     def play(self):
         self.board.display()
         if not self.isfinished():
             self.board.print_caption(self.turn)
-        flag = False
-        if self.turn == "B":
             flag = False
-            valid_moves = self.get_valid_moves(self.player)
-            if valid_moves:
-                temp = self.player.get_move()
-                if(not temp == None):
-                    self.count2 = 0
-                    row, col = temp  # Pass the board instance to player's get_move() method
-                    if self.board.make_move(row, col, self.player, valid_moves):
-                        self.board.display()
-                        self.switch_turn()
-                        count2 = 0
-                    else:
+            if self.turn == "B":
+                flag = False
+                valid_moves = self.get_valid_moves(self.player)
+                if valid_moves:
+                    temp = self.player.get_move()
+                    if temp is not None:
+                        self.count2 = 0
+                        row, col = temp  # Pass the board instance to player's get_move() method
+                        if self.board.make_move(row, col, self.player, valid_moves):
+                            self.board.display()
+                            self.switch_turn()
+                            count2 = 0
+                        else:
 
-                        if self.count2 == 0:
-                            # print("Invalid move! Try again.")
-                            self.count2 = 1
-            else:
-                flag = True
-                current = ""
-                if (self.turn == "B"):
-                    current = "Black"
+                            if self.count2 == 0:
+                                # print("Invalid move! Try again.")
+                                self.count2 = 1
                 else:
-                    current = "White"
-                if(not self.isfinished()):
-                    print(current + " don't have valid moves. " + "Your turn is skipped")
-                    self.switch_turn()
-        else:
-            valid_moves = self.get_valid_moves(self.computer)
-            if valid_moves:
-                temp = self.computer.get_move(self.board, self.difficulty, self.player)
-                if(not temp == None):
-                    row, col = temp
-                    self.count2 = 0
-                    if self.board.make_move(row, col, self.computer, valid_moves):
-                        self.board.display()
-                        self.switch_turn()
+                    flag = True
+                    if self.turn == "B":
+                        current = "Black"
                     else:
-                        if self.count2 == 0:
-                            # print("Computer made an invalid move")
-                            self.count2 = 1
+                        current = "White"
+                    if not self.isfinished():
+                        print(current + " don't have valid moves. " + "Your turn is skipped")
+                        self.switch_turn()
             else:
-                if flag:
-                    print("Both players have no valid moves")
-                current = ""
-                if(self.turn == "B"):
-                    current = "Black"
+                valid_moves = self.get_valid_moves(self.computer)
+                if valid_moves:
+                    temp = self.computer.get_move(self.board, self.difficulty, self.player)
+                    if temp is not None:
+                        row, col = temp
+                        self.count2 = 0
+                        if self.board.make_move(row, col, self.computer, valid_moves):
+                            self.board.display()
+                            self.switch_turn()
+                        else:
+                            if self.count2 == 0:
+                                # print("Computer made an invalid move")
+                                self.count2 = 1
+                    else:
+                        print("temp is none\n")
                 else:
-                    current = "White"
-                if(not self.isfinished()):
-                    print(current+" don't have valid moves. " + "Your turn is skipped")
-                    self.switch_turn()
-        if(self.isfinished()):
-            if(self.count==0):
+                    if flag:
+                        print("Both players have no valid moves")
+                    if self.turn == "B":
+                        current = "Black"
+                    else:
+                        current = "White"
+                    if not self.isfinished():
+                        print(current+" don't have valid moves. " + "Your turn is skipped")
+                        self.switch_turn()
+        else:
+            if self.count == 0:
 
                 print(f"{'-' * 10} GAME OVER {'-' * 10}\n")
                 self.count = 1
@@ -132,8 +132,3 @@ class Othello:
                     print("It's a tie")
                     pg.display.set_caption(f'Tie!')
                     return
-
-
-
-# game = Game()
-# game.run()
