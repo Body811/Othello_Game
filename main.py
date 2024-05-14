@@ -1,4 +1,4 @@
-from Othello import Othello, Game
+from Othello import Game
 
 choice = input("Choose A difficulty\n1.Easy\n2.Medium\n3.Hard\n>>")
 if choice == '1':
