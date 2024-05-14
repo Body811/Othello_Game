@@ -39,7 +39,7 @@ class Othello:
         
         self.board.display()
         flag = False
-        while not self.board.is_finshed(self.player, self.computer):
+        while not self.board.is_finished(self.player, self.computer):
             if self.turn == "B":
                 flag = False
                 print("It black's turn")
@@ -72,6 +72,7 @@ class Othello:
                         break;
                     print("You Dont have valid Moves. Your turn is Skiped")
                     self.switch_turn()
+
                     
 
                     

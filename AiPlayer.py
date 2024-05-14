@@ -6,9 +6,12 @@ class AiPlayer(Player):
         super().__init__(color)
 
     def get_move(self, board, depth, opponent):
-        _, move = self.minimax(
-            board, depth, float("-inf"), float("inf"), True, opponent
-        )
+        
+        valid_moves = board.get_valid_moves(self)
+        if len(valid_moves) == 1:
+            return valid_moves[0]
+        
+        _, move = self.minimax(board, depth, float("-inf"), float("inf"), True, opponent)
         return move
 
     def evaluate(self, board):
@@ -22,21 +25,18 @@ class AiPlayer(Player):
     def minimax(self, board, depth, alpha, beta, maximizing_player, opponent):
 
         # base case
-        if depth == 0 or board.is_finshed(self, opponent):
-            return self.evaluate(board), None
+        if depth == 0 or board.is_finished(self, opponent):
+             return self.evaluate(board), None
 
         if maximizing_player:
             max_eval = float("-inf")
             best_move = None
-            valid_moves = board.get_valid_moves(self)
-
+            valid_moves = board.get_valid_moves(self) 
             for move in valid_moves:
                 new_board = board.copy()
                 new_board.make_move(move[0], move[1], self, valid_moves)
-                eval, _ = self.minimax(
-                    new_board, depth - 1, alpha, beta, False, opponent
-                )
-
+                eval, _ = self.minimax(new_board, depth - 1, alpha, beta, False, opponent)
+                self.diskNum +=1
                 if eval > max_eval:
                     max_eval = eval
                     best_move = move
@@ -55,10 +55,8 @@ class AiPlayer(Player):
             for move in valid_moves:
                 new_board = board.copy()
                 new_board.make_move(move[0], move[1], opponent, valid_moves)
-                eval, _ = self.minimax(
-                    new_board, depth - 1, alpha, beta, True, opponent
-                )
-
+                eval, _ = self.minimax(new_board, depth - 1, alpha, beta, True, opponent)
+                opponent.diskNum +=1
                 if eval < min_eval:
                     min_eval = eval
                     best_move = move
