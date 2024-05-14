@@ -37,7 +37,8 @@ class AiPlayer(Player):
                 new_board = board.copy()
                 new_board.make_move(move[0], move[1], self, valid_moves)
                 eval, _ = self.minimax(new_board, depth - 1, alpha, beta, False, opponent)
-
+                self.diskNum +=1
+                
                 if eval > max_eval:
                     max_eval = eval
                     best_move = move
@@ -57,7 +58,7 @@ class AiPlayer(Player):
                 new_board = board.copy()
                 new_board.make_move(move[0], move[1], opponent, valid_moves)
                 eval, _ = self.minimax(new_board, depth - 1, alpha, beta, True, opponent)
-
+                opponent.diskNum +=1
                 if eval < min_eval:
                     min_eval = eval
                     best_move = move

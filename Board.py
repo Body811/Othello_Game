@@ -94,8 +94,10 @@ class Board:
         return valid_moves
 
     def is_finshed(self, player1, player2):
-        if (not any(self.is_valid_move(r, c, 'B') or self.is_valid_move(r, c, 'W') for r in range(8) for c in range(8))
-                or player1.diskNum == 0 or player2.diskNum == 0):
+        if player1.diskNum == 0 or player2.diskNum == 0:
+            return True
+
+        if not any(self.get_valid_moves(player1)) and not any(self.get_valid_moves(player2)):
             return True
 
         return False
